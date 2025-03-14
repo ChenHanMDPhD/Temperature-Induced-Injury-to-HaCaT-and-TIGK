@@ -37,6 +37,7 @@ library(AnnotationDbi)
 library(VennDiagram)
 library(ggplot2)
 library(openxlsx)
+library(readxl)
 library(stringr)
 library(tidyverse)
 library("illuminaHumanv4.db") #Get this library if you don't have - converts illumina probes into gene
@@ -116,13 +117,13 @@ ggplot(pcaData2, aes(x = PC1, y = PC2,shape = pcaData2.reoder, colour = pcaData2
   scale_shape_manual(values = scale_map$shape, labels = scale_map$name,
                      name = "Samples")
 
-#Generating averaged correlation matrix ####
+#####Generating averaged correlation matrix ####
 DF<-Thermal.counts[,2:19]
 keep<-rowMeans((DF))>=10 #could do rowsums too
 DF<-DF[keep,] 
 nrow(DF)
 colnames(DF)
-prefix <- unique(unlist(strsplit(names(DF), "\\_[0-9]")))
+prefix <- unique(unlist(strsplit(names(DF), "//_[0-9]")))
 DF<-sapply(prefix, function(i) rowMeans(DF[, grepl(i, names(DF))]))
 
 corr.avg <- round(cor(DF[,1:6]), 2) #now we have a correlation matrix where we have only groups and indvidual samples
@@ -145,6 +146,267 @@ ggplot(data = melted_corr.avg, aes(Var2, Var1, fill = value))+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, 
                                    size = 12, hjust = 1))+
   coord_fixed()
+
+#####Comparing HaCaT and TIGK to primary cell lines (NHEK and NHOK) ####
+#Counts for HaCaT and TIGK
+Thermal.counts<-Thermal.counts%>%filter(gene_biotype == "protein_coding")
+rownames(Thermal.counts)<-Thermal.counts[,1]
+colnames(Thermal.counts)
+Thermal.counts.HaCaT.Ctrl<-Thermal.counts[,c(14:16,20)]
+Thermal.counts.TIGK.Ctrl<-Thermal.counts[,17:20]
+Thermal.counts.HaCaT.Ctrl$Average<-rowMeans(Thermal.counts.HaCaT.Ctrl[,1:3])
+Thermal.counts.TIGK.Ctrl$Average<-rowMeans(Thermal.counts.TIGK.Ctrl[,1:3])
+
+Thermal.counts.HaCaT.Ctrl<-Thermal.counts.HaCaT.Ctrl%>%filter(Average >= 10)
+Thermal.counts.HaCaT.Ctrl<-Thermal.counts.HaCaT.Ctrl[order(-Thermal.counts.HaCaT.Ctrl$Average),]
+head(Thermal.counts.HaCaT.Ctrl)
+
+Thermal.counts.TIGK.Ctrl<-Thermal.counts.TIGK.Ctrl%>%filter(Average >= 10)
+Thermal.counts.TIGK.Ctrl<-Thermal.counts.TIGK.Ctrl[order(-Thermal.counts.TIGK.Ctrl$Average),]
+head(Thermal.counts.TIGK.Ctrl)
+
+Thermal.counts.HaCaT.Ctrl<-Thermal.counts.HaCaT.Ctrl[1:5000,]
+Thermal.counts.TIGK.Ctrl<-Thermal.counts.TIGK.Ctrl[1:5000,]
+
+nrow(Thermal.counts.HaCaT.Ctrl)
+nrow(Thermal.counts.TIGK.Ctrl)
+
+#Counts for NHEK (GSE184119)
+NHEK.GSE184119<-read.csv("C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/HaCaT vs TIGK manuscript/Wietecha Related Work/GSE184119-raw counts_NHEK.csv")
+NHEK.GSE184119<-NHEK.GSE184119%>%filter(Average >= 10)
+NHEK.GSE184119<- bitr(NHEK.GSE184119$GeneID, fromType = "ENTREZID",
+            toType = c("SYMBOL"),
+            OrgDb = org.Hs.eg.db) #not every gene mapped but that's ok
+NHEK.GSE184119<-na.omit(NHEK.GSE184119)
+NHEK.GSE184119<-NHEK.GSE184119[1:5000,] #top5000
+
+#Counts for NHEK (GSE185309)
+NHEK.GSE185309<-read.csv("C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/GSE185309_NHEK_IH6000/GSE185309.csv")
+NHEK.GSE185309<-NHEK.GSE185309%>%filter(Average >= 10)
+NHEK.GSE185309<- bitr(NHEK.GSE185309$GeneID, fromType = "ENTREZID",
+                      toType = c("SYMBOL"),
+                      OrgDb = org.Hs.eg.db) #not every gene mapped but that's ok
+NHEK.GSE185309<-na.omit(NHEK.GSE185309)
+NHEK.GSE185309<-NHEK.GSE185309[1:5000,] #top5000
+
+#Counts for NHOK-1 (GSE262505)
+NHOK.GSE262505<-read.csv("C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/HaCaT vs TIGK manuscript/Wietecha Related Work/GSE262505_raw counts_NHOK.csv")
+NHOK.GSE262505<-NHOK.GSE262505%>%filter(Average >= 10)
+NHOK.GSE262505<- bitr(NHOK.GSE262505$GeneID, fromType = "ENTREZID",
+            toType = c("SYMBOL"),
+            OrgDb = org.Hs.eg.db) #not every gene mapped but that's ok
+NHOK.GSE262505<-na.omit(NHOK.GSE262505)
+NHOK.GSE262505<-NHOK.GSE262505[1:5000,] #top5000
+
+#Counts for NHOK (GSE121627)
+NHOK.GSE121627<-read.csv("C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/GSE121627_NHOK_IH2000/GSE121627.csv")
+NHOK.GSE121627<-NHOK.GSE121627%>%filter(Average >= 10)
+NHOK.GSE121627<- bitr(NHOK.GSE121627$GeneID, fromType = "ENTREZID",
+                      toType = c("SYMBOL"),
+                      OrgDb = org.Hs.eg.db) #not every gene mapped but that's ok
+NHOK.GSE121627<-na.omit(NHOK.GSE121627)
+NHOK.GSE121627<-NHOK.GSE121627[1:5000,] #top5000
+
+#saving the sheets
+write.csv(NHEK.GSE184119, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/NHEK.GSE184119.T5000.csv" )
+write.csv(NHOK.GSE262505, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/NHOK.GSE262505.T5000.csv" )
+write.csv(Thermal.counts.HaCaT.Ctrl, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/HaCaT.T5000.csv" )
+write.csv(Thermal.counts.TIGK.Ctrl, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/TIGK.T5000.csv" )
+write.csv(NHEK.GSE185309, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/NHEK.GSE185309.T5000.csv")
+write.csv(NHOK.GSE121627, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/NHOK.GSE121627.T5000.csv")
+
+
+#Enrichment of top 1000 genes
+enriched.TIGK.Top1000 <- enrichr(Thermal.counts.TIGK.Ctrl[1:1000,]$gene_name, dbs)
+enriched.HaCaT.Top1000 <- enrichr(Thermal.counts.HaCaT.Ctrl[1:1000,]$gene_name, dbs)
+enriched.NHEK.GSE184119.Top1000  <- enrichr(NHEK.GSE184119[1:1000,]$SYMBOL, dbs)
+enriched.NHOK.GSE262505.Top1000  <- enrichr(NHOK.GSE262505[1:1000,]$SYMBOL, dbs)
+enriched.NHOK.GSE121627.Top1000  <- enrichr(NHOK.GSE121627[1:1000,]$SYMBOL, dbs)
+enriched.NHEK.GSE185309.Top1000  <- enrichr(NHEK.GSE185309[1:1000,]$SYMBOL, dbs)
+
+Enrichments <- createWorkbook()
+# Add some sheets to the workbook
+addWorksheet(Enrichments, "BP TIGK")
+addWorksheet(Enrichments, "Reactome TIGK")
+addWorksheet(Enrichments, "BP NHOKGSE262505")
+addWorksheet(Enrichments, "Reactome NHOKGSE262505")
+addWorksheet(Enrichments, "BP NHOK.GSE121627")
+addWorksheet(Enrichments, "Reactome NHOK.GSE121627")
+
+addWorksheet(Enrichments, "BP HaCaT")
+addWorksheet(Enrichments, "Reactome HaCaT")
+addWorksheet(Enrichments, "BP NHEKGSE184119")
+addWorksheet(Enrichments, "Reactome NHEKGSE184119")
+addWorksheet(Enrichments, "BP NHEK.GSE185309")
+addWorksheet(Enrichments, "Reactome NHEK.GSE185309")
+# Write the data to the sheets
+writeData(Enrichments, sheet = "BP TIGK", x =(as.data.frame(enriched.TIGK.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome TIGK", x =(as.data.frame(enriched.TIGK.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP NHOKGSE262505", x =(as.data.frame(enriched.NHOK.GSE262505.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome NHOKGSE262505", x =(as.data.frame(enriched.NHOK.GSE262505.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP NHOK.GSE121627",  x =(as.data.frame(enriched.NHOK.GSE121627.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome NHOK.GSE121627", x =(as.data.frame(enriched.NHOK.GSE121627.Top1000$Reactome))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+
+writeData(Enrichments, sheet = "BP HaCaT", x =(as.data.frame(enriched.HaCaT.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome HaCaT", x =(as.data.frame(enriched.HaCaT.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP NHEKGSE184119", x =(as.data.frame(enriched.NHEK.GSE184119.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome NHEKGSE184119", x =(as.data.frame(enriched.NHEK.GSE184119.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP NHEK.GSE185309", x =(as.data.frame(enriched.NHEK.GSE185309.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome NHEK.GSE185309", x =(as.data.frame(enriched.NHEK.GSE185309.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+# Export the file
+saveWorkbook(Enrichments,  file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/Top 30 EnrichR Terms_NHEK_NHOK_HaCaT_TIGK_T1000.xlsx")
+
+#Enrichment of the different genes between TIGK and NHOK and HaCaT and NHEK
+#TIGK vs NHOK GSE262505
+TvsN262505<-read_excel("C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/Gene Comparisons/Gene Comparisons for manuscript.xlsx",
+           sheet = "TIGK vs NHOK (GSE262505)")
+TvsN262505<-na.omit(TvsN262505)
+EnrichR.TvsN262505.TIGKOnly<-enrichr(TvsN262505$A, dbs)
+
+#TIGK vs NHOK GSE121627
+TvsN121627<-read_excel("C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/Gene Comparisons/Gene Comparisons for manuscript.xlsx",
+                       sheet = "TIGK vs NHOK (GSE121627)")
+TvsN121627<-na.omit(TvsN121627)
+EnrichR.TvsN121627.TIGKOnly<-enrichr(TvsN121627$A, dbs)
+
+#HaCaT vs NHEK GSE184119
+HvsN184119<-read_excel("C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/Gene Comparisons/Gene Comparisons for manuscript.xlsx",
+                       sheet = "HaCaT vs NHEK (GSE184119)")
+HvsN184119<-na.omit(HvsN184119)
+EnrichR.HvsN184119.HaCaTOnly<-enrichr(HvsN184119$A, dbs)
+
+#HaCaT vs NHEK GSE185309
+HvsN185309<-read_excel("C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/Gene Comparisons/Gene Comparisons for manuscript.xlsx",
+                       sheet = "HaCaT vs NHEK (GSE185309)")
+HvsN185309<-na.omit(HvsN185309)
+EnrichR.HvsN185309.HaCaTOnly<-enrichr(HvsN185309$A, dbs)
+
+Enrichments <- createWorkbook()
+# Add some sheets to the workbook
+addWorksheet(Enrichments, "BP TvsN262505")
+addWorksheet(Enrichments, "Reactome TvsN262505")
+addWorksheet(Enrichments, "BP TvsN121627")
+addWorksheet(Enrichments, "Reactome TvsN121627")
+
+addWorksheet(Enrichments, "BP TvsN184119")
+addWorksheet(Enrichments, "Reactome TvsN184119")
+addWorksheet(Enrichments, "BP Tvs185309")
+addWorksheet(Enrichments, "Reactome Tvs185309")
+
+# Write the data to the sheets
+writeData(Enrichments, sheet = "BP TvsN262505", x =(as.data.frame(EnrichR.TvsN262505.TIGKOnly$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome TvsN262505", x =(as.data.frame(EnrichR.TvsN262505.TIGKOnly$Reactome_2022))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP TvsN121627", x =(as.data.frame(EnrichR.TvsN121627.TIGKOnly$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome TvsN121627", x =(as.data.frame(EnrichR.TvsN121627.TIGKOnly$Reactome_2022))%>%filter(Adjusted.P.value < 0.05))
+
+writeData(Enrichments, sheet = "BP HvsN184119", x =(as.data.frame(EnrichR.HvsN184119.HaCaTOnly$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome HvsN184119", x =(as.data.frame(EnrichR.HvsN184119.HaCaTOnly$Reactome_2022))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP Hvs185309", x =(as.data.frame(EnrichR.HvsN185309.HaCaTOnly$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome Hvs185309", x =(as.data.frame(EnrichR.HvsN185309.HaCaTOnly$Reactome_2022))%>%filter(Adjusted.P.value < 0.05))
+
+# Export the file
+saveWorkbook(Enrichments,  file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/NHEK_NHOK_HaCaT_TIGK_Raw Count/Enrichment for TIGK or HaCaT only.xlsx")
+
+#Visualization for the enrichment of the different genes between TIGK and NHOK and HaCaT and NHEK
+#TIGK vs GSE262505
+EnrichR.TvsN262505.TIGKOnly.Reactome<-as.data.frame(EnrichR.TvsN262505.TIGKOnly$Reactome_2022)[1:10,]
+frac <- EnrichR.TvsN262505.TIGKOnly.Reactome$Overlap
+EnrichR.TvsN262505.TIGKOnly.Reactome$"Gene Ratio"<-as.numeric(lapply(sapply(frac, function(x) eval(parse(text=x))), round, 3))
+p1<-ggplot(EnrichR.TvsN262505.TIGKOnly.Reactome, aes(x=EnrichR.TvsN262505.TIGKOnly.Reactome$`Gene Ratio`,y=Term))+
+  geom_point(aes(colour=EnrichR.TvsN262505.TIGKOnly.Reactome$Adjusted.P.value, size=(EnrichR.TvsN262505.TIGKOnly.Reactome$`Gene Ratio`)))+
+  scale_color_gradientn(colours = rainbow(5))+
+  labs(x='Overlap', y=NULL,
+       color='Adjusted.P.value',size='Gene Ratio')+
+  theme(axis.title = element_text(face='bold'),
+        axis.text = element_text(face='bold', size = 12),
+        legend.text = element_text(size = 12),
+        legend.title=element_text(size=12),
+        panel.background = element_rect(fill = "white"),
+        panel.border =element_rect(color = "black", linewidth = 0.2, fill="NA"))+
+  scale_y_discrete(labels = label_wrap(30))
+png( "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/TIGK vs GSE262505_TIGK Only Reactome.png",
+    width = 1600,
+    height = 2000,
+    units = "px",
+    res = 250)
+p1
+dev.off()
+
+#TIGK vs GSE121627
+EnrichR.TvsN121627.TIGKOnly.reactome<-as.data.frame(EnrichR.TvsN121627.TIGKOnly$Reactome_2022)[1:10,]
+frac <- EnrichR.TvsN121627.TIGKOnly.reactome$Overlap
+EnrichR.TvsN121627.TIGKOnly.reactome$"Gene Ratio"<-as.numeric(lapply(sapply(frac, function(x) eval(parse(text=x))), round, 3))
+p1<-ggplot(EnrichR.TvsN121627.TIGKOnly.reactome, aes(x=EnrichR.TvsN121627.TIGKOnly.reactome$`Gene Ratio`,y=Term))+
+  geom_point(aes(colour=EnrichR.TvsN121627.TIGKOnly.reactome$Adjusted.P.value, size=(EnrichR.TvsN121627.TIGKOnly.reactome$`Gene Ratio`)))+
+  scale_color_gradientn(colours = rainbow(5))+
+  labs(x='Overlap', y=NULL,
+       color='Adjusted.P.value',size='Gene Ratio')+
+  theme(axis.title = element_text(face='bold'),
+        axis.text = element_text(face='bold', size = 12),
+        legend.text = element_text(size = 12),
+        legend.title=element_text(size=12),
+        panel.background = element_rect(fill = "white"),
+        panel.border =element_rect(color = "black", linewidth = 0.2, fill="NA"))+
+  scale_y_discrete(labels = label_wrap(30))
+png( "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/TIGK vs GSE121627_TIGK Only Reactome.png",
+     width = 1600,
+     height = 2000,
+     units = "px",
+     res = 250)
+p1
+dev.off()
+
+
+#TIGK vs GSE184119
+EnrichR.HvsN184119.HaCaTOnly.reactome<-as.data.frame(EnrichR.HvsN184119.HaCaTOnly$Reactome_2022)[1:10,]
+frac <- EnrichR.HvsN184119.HaCaTOnly.reactome$Overlap
+EnrichR.HvsN184119.HaCaTOnly.reactome$"Gene Ratio"<-as.numeric(lapply(sapply(frac, function(x) eval(parse(text=x))), round, 3))
+p1<-ggplot(EnrichR.HvsN184119.HaCaTOnly.reactome, aes(x=EnrichR.HvsN184119.HaCaTOnly.reactome$`Gene Ratio`,y=Term))+
+  geom_point(aes(colour=EnrichR.HvsN184119.HaCaTOnly.reactome$Adjusted.P.value, size=(EnrichR.HvsN184119.HaCaTOnly.reactome$`Gene Ratio`)))+
+  scale_color_gradientn(colours = rainbow(5))+
+  labs(x='Overlap', y=NULL,
+       color='Adjusted.P.value',size='Gene Ratio')+
+  theme(axis.title = element_text(face='bold'),
+        axis.text = element_text(face='bold', size = 12),
+        legend.text = element_text(size = 12),
+        legend.title=element_text(size=12),
+        panel.background = element_rect(fill = "white"),
+        panel.border =element_rect(color = "black", linewidth = 0.2, fill="NA"))+
+  scale_y_discrete(labels = label_wrap(30))
+png( "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/HaCaT vs GSE184119_HaCaT Only Reactome.png",
+     width = 1600,
+     height = 2000,
+     units = "px",
+     res = 250)
+p1
+dev.off()
+
+#HaCaT vs GSE185309
+EnrichR.HvsN185309.HaCaTOnly.reactome<-as.data.frame(EnrichR.TvsN121627.TIGKOnly$Reactome_2022)[1:10,]
+frac <- EnrichR.HvsN185309.HaCaTOnly.reactome$Overlap
+EnrichR.HvsN185309.HaCaTOnly.reactome$"Gene Ratio"<-as.numeric(lapply(sapply(frac, function(x) eval(parse(text=x))), round, 3))
+p1<-ggplot(EnrichR.HvsN185309.HaCaTOnly.reactome, aes(x=EnrichR.HvsN185309.HaCaTOnly.reactome$`Gene Ratio`,y=Term))+
+  geom_point(aes(colour=EnrichR.HvsN185309.HaCaTOnly.reactome$Adjusted.P.value, size=(EnrichR.HvsN185309.HaCaTOnly.reactome$`Gene Ratio`)))+
+  scale_color_gradientn(colours = rainbow(5))+
+  labs(x='Overlap', y=NULL,
+       color='Adjusted.P.value',size='Gene Ratio')+
+  theme(axis.title = element_text(face='bold'),
+        axis.text = element_text(face='bold', size = 12),
+        legend.text = element_text(size = 12),
+        legend.title=element_text(size=12),
+        panel.background = element_rect(fill = "white"),
+        panel.border =element_rect(color = "black", linewidth = 0.2, fill="NA"))+
+  scale_y_discrete(labels = label_wrap(30))
+png( "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/HaCaT vs GSE185309_HaCaT Only Reactome.png",
+     width = 1600,
+     height = 2000,
+     units = "px",
+     res = 250)
+p1
+dev.off()
+
+
+
 
 ###### Differential Expression Analysis using DESeq2 and count matrix - Same time point comparisons ####
 #setting the columns to measure for DESeq2
