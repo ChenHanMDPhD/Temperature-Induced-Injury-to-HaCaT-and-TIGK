@@ -224,6 +224,7 @@ enriched.NHOK.GSE262505.Top1000  <- enrichr(NHOK.GSE262505[1:1000,]$SYMBOL, dbs)
 enriched.NHOK.GSE121627.Top1000  <- enrichr(NHOK.GSE121627[1:1000,]$SYMBOL, dbs)
 enriched.NHEK.GSE185309.Top1000  <- enrichr(NHEK.GSE185309[1:1000,]$SYMBOL, dbs)
 
+
 Enrichments <- createWorkbook()
 # Add some sheets to the workbook
 addWorksheet(Enrichments, "BP TIGK")
@@ -240,21 +241,21 @@ addWorksheet(Enrichments, "Reactome NHEKGSE184119")
 addWorksheet(Enrichments, "BP NHEK.GSE185309")
 addWorksheet(Enrichments, "Reactome NHEK.GSE185309")
 # Write the data to the sheets
-writeData(Enrichments, sheet = "BP TIGK", x =(as.data.frame(enriched.TIGK.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "Reactome TIGK", x =(as.data.frame(enriched.TIGK.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "BP NHOKGSE262505", x =(as.data.frame(enriched.NHOK.GSE262505.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "Reactome NHOKGSE262505", x =(as.data.frame(enriched.NHOK.GSE262505.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "BP NHOK.GSE121627",  x =(as.data.frame(enriched.NHOK.GSE121627.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "Reactome NHOK.GSE121627", x =(as.data.frame(enriched.NHOK.GSE121627.Top1000$Reactome))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP TIGK", x =(as.data.frame(enriched.TIGK.Top1000$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome TIGK", x =(as.data.frame(enriched.TIGK.Top1000$Reactome_2022))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP NHOKGSE262505", x =(as.data.frame(enriched.NHOK.GSE262505.Top1000$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome NHOKGSE262505", x =(as.data.frame(enriched.NHOK.GSE262505.Top1000$Reactome_2022))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP NHOK.GSE121627",  x =(as.data.frame(enriched.NHOK.GSE121627.Top1000$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome NHOK.GSE121627", x =(as.data.frame(enriched.NHOK.GSE121627.Top1000$Reactome))%>%filter(Adjusted.P.value < 0.05))
 
-writeData(Enrichments, sheet = "BP HaCaT", x =(as.data.frame(enriched.HaCaT.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "Reactome HaCaT", x =(as.data.frame(enriched.HaCaT.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "BP NHEKGSE184119", x =(as.data.frame(enriched.NHEK.GSE184119.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "Reactome NHEKGSE184119", x =(as.data.frame(enriched.NHEK.GSE184119.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "BP NHEK.GSE185309", x =(as.data.frame(enriched.NHEK.GSE185309.Top1000$GO_Biological_Process_2023))[1:31,]%>%filter(Adjusted.P.value < 0.05))
-writeData(Enrichments, sheet = "Reactome NHEK.GSE185309", x =(as.data.frame(enriched.NHEK.GSE185309.Top1000$Reactome_2022))[1:31,]%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP HaCaT", x =(as.data.frame(enriched.HaCaT.Top1000$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome HaCaT", x =(as.data.frame(enriched.HaCaT.Top1000$Reactome_2022))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP NHEKGSE184119", x =(as.data.frame(enriched.NHEK.GSE184119.Top1000$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome NHEKGSE184119", x =(as.data.frame(enriched.NHEK.GSE184119.Top1000$Reactome_2022))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "BP NHEK.GSE185309", x =(as.data.frame(enriched.NHEK.GSE185309.Top1000$GO_Biological_Process_2023))%>%filter(Adjusted.P.value < 0.05))
+writeData(Enrichments, sheet = "Reactome NHEK.GSE185309", x =(as.data.frame(enriched.NHEK.GSE185309.Top1000$Reactome_2022))%>%filter(Adjusted.P.value < 0.05))
 # Export the file
-saveWorkbook(Enrichments,  file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/Top 30 EnrichR Terms_NHEK_NHOK_HaCaT_TIGK_T1000.xlsx")
+saveWorkbook(Enrichments,  file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/EnrichR Terms_NHEK_NHOK_HaCaT_TIGK_T1000.xlsx")
 
 #Enrichment of the different genes between TIGK and NHOK and HaCaT and NHEK
 #TIGK vs NHOK GSE262505
