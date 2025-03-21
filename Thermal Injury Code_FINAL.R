@@ -435,6 +435,7 @@ write.csv(HaCaT.HeatvsCtrl.C1, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manus
 write.csv(HaCaT.ColdvsCtrl.C1, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/Differential Gene Expression Analyses/HaCaT.ColdvsCtrl.DEGs.csv")
 write.csv(TIGK.HeatvsCtrl.C1, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/Differential Gene Expression Analyses/TIGK.HeatvsCtrl.DEGs.csv")
 write.csv(TIGK.ColdvsCtrl.C1, file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/Differential Gene Expression Analyses/TIGK.ColdvsCtrl.DEGs.csv")
+
 #### Volcanoe Plots for all DEGs ####
 #Heat Comparisons
 Heat.comparison$diffexpressed <- "No differential expression"
@@ -442,11 +443,11 @@ Heat.comparison$diffexpressed[Heat.comparison$log2FoldChange > 0 & Heat.comparis
 Heat.comparison$diffexpressed[Heat.comparison$log2FoldChange < 0 & Heat.comparison$padj < 0.01] <- "Downregulated in HaCaT"
 
 ggplot(data=Heat.comparison, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed)) + 
-  theme(axis.title.x=element_text(size = 30), axis.title.y=element_text(size = 30), axis.text.x=element_text(size = 30), axis.text.y=element_text(size = 30), 
-        legend.text = element_text(size=25), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
+  theme(axis.title.x=element_text(size = 20), axis.title.y=element_text(size = 20), axis.text.x=element_text(size = 20), axis.text.y=element_text(size = 20), 
+        legend.text = element_text(size=20), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
         panel.grid.major = element_line(color = "grey", linewidth = 0.25),panel.grid.minor = element_line(color = "grey", linewidth = 0.25) )+
-  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 7, alpha = 1, shape = 21,colour = "black") + 
-  geom_vline(xintercept=c(0), col="red", size = 2) +   geom_hline(yintercept=-log10(0.01), col="red", size = 2) 
+  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 5, alpha = 1, shape = 21,colour = "black") + 
+  geom_vline(xintercept=c(0), col="red", size = 3) +   geom_hline(yintercept=-log10(0.01), col="red", size = 3) 
 
 #Cold Comparisons
 Cold.comparison$diffexpressed <- "No differential expression"
@@ -454,11 +455,11 @@ Cold.comparison$diffexpressed[Cold.comparison$log2FoldChange > 0 & Cold.comparis
 Cold.comparison$diffexpressed[Cold.comparison$log2FoldChange < 0 & Cold.comparison$padj < 0.01] <- "Downregulated in HaCaT"
 
 ggplot(data=Cold.comparison, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed)) + 
-  theme(axis.title.x=element_text(size = 30), axis.title.y=element_text(size = 30), axis.text.x=element_text(size = 30), axis.text.y=element_text(size = 30), 
-        legend.text = element_text(size=25), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
+  theme(axis.title.x=element_text(size = 20), axis.title.y=element_text(size = 20), axis.text.x=element_text(size = 20), axis.text.y=element_text(size = 20), 
+        legend.text = element_text(size=20), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
         panel.grid.major = element_line(color = "grey", linewidth = 0.25),panel.grid.minor = element_line(color = "grey", linewidth = 0.25) )+
-  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 7, alpha = 1, shape = 21,colour = "black") + 
-  geom_vline(xintercept=c(0), col="red", size = 2) +   geom_hline(yintercept=-log10(0.01), col="red", size = 2) 
+  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 5, alpha = 1, shape = 21,colour = "black") + 
+  geom_vline(xintercept=c(0), col="red", size = 3) +   geom_hline(yintercept=-log10(0.01), col="red", size = 3) 
 
 #Control Comparisons
 Ctrl.comparison$diffexpressed <- "No differential expression"
@@ -466,11 +467,11 @@ Ctrl.comparison$diffexpressed[Ctrl.comparison$log2FoldChange > 0 & Ctrl.comparis
 Ctrl.comparison$diffexpressed[Ctrl.comparison$log2FoldChange < 0 & Ctrl.comparison$padj < 0.01] <- "Downregulated in HaCaT"
 
 ggplot(data=Ctrl.comparison, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed)) + 
-  theme(axis.title.x=element_text(size = 30), axis.title.y=element_text(size = 30), axis.text.x=element_text(size = 30), axis.text.y=element_text(size = 30), 
-        legend.text = element_text(size=25), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
+  theme(axis.title.x=element_text(size = 20), axis.title.y=element_text(size = 20), axis.text.x=element_text(size = 20), axis.text.y=element_text(size = 20), 
+        legend.text = element_text(size=20), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
         panel.grid.major = element_line(color = "grey", linewidth = 0.25),panel.grid.minor = element_line(color = "grey", linewidth = 0.25) )+
-  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 7, alpha = 1, shape = 21,colour = "black") + 
-  geom_vline(xintercept=c(0), col="red", size = 2) +   geom_hline(yintercept=-log10(0.01), col="red", size = 2) 
+  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 5, alpha = 1, shape = 21,colour = "black") + 
+  geom_vline(xintercept=c(0), col="red", size = 3) +   geom_hline(yintercept=-log10(0.01), col="red", size = 3) 
 
 
 #HaCaT: 60C vs 37C Comparisons
@@ -479,13 +480,11 @@ HaCaT.HeatvsCtrl$diffexpressed[HaCaT.HeatvsCtrl$log2FoldChange > 0 & HaCaT.Heatv
 HaCaT.HeatvsCtrl$diffexpressed[HaCaT.HeatvsCtrl$log2FoldChange < 0 & HaCaT.HeatvsCtrl$padj < 0.01] <- "Downregulated in 60C"
 
 ggplot(data=HaCaT.HeatvsCtrl, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed)) + 
-  theme(axis.title.x=element_text(size = 30), axis.title.y=element_text(size = 30), axis.text.x=element_text(size = 30), axis.text.y=element_text(size = 30), 
-        legend.text = element_text(size=25), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
+  theme(axis.title.x=element_text(size = 20), axis.title.y=element_text(size = 20), axis.text.x=element_text(size = 20), axis.text.y=element_text(size = 20), 
+        legend.text = element_text(size=20), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
         panel.grid.major = element_line(color = "grey", linewidth = 0.25),panel.grid.minor = element_line(color = "grey", linewidth = 0.25) )+
-  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 7, alpha = 1, shape = 21,colour = "black") + 
-  geom_vline(xintercept=c(0), col="red", size = 2) +   geom_hline(yintercept=-log10(0.01), col="red", size = 2) 
-
-
+  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 5, alpha = 1, shape = 21,colour = "black") + 
+  geom_vline(xintercept=c(0), col="red", size = 3) +   geom_hline(yintercept=-log10(0.01), col="red", size = 3) 
 
 #Cold Comparisons
 HaCaT.ColdvsCtrl$diffexpressed <- "No differential expression"
@@ -493,11 +492,11 @@ HaCaT.ColdvsCtrl$diffexpressed[HaCaT.ColdvsCtrl$log2FoldChange > 0 & HaCaT.Coldv
 HaCaT.ColdvsCtrl$diffexpressed[HaCaT.ColdvsCtrl$log2FoldChange < 0 & HaCaT.ColdvsCtrl$padj < 0.01] <- "Downregulated in -25C"
 
 ggplot(data=HaCaT.ColdvsCtrl, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed)) + 
-  theme(axis.title.x=element_text(size = 30), axis.title.y=element_text(size = 30), axis.text.x=element_text(size = 30), axis.text.y=element_text(size = 30), 
-        legend.text = element_text(size=25), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
+  theme(axis.title.x=element_text(size = 20), axis.title.y=element_text(size = 20), axis.text.x=element_text(size = 20), axis.text.y=element_text(size = 20), 
+        legend.text = element_text(size=20), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
         panel.grid.major = element_line(color = "grey", linewidth = 0.25),panel.grid.minor = element_line(color = "grey", linewidth = 0.25) )+
-  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 7, alpha = 1, shape = 21,colour = "black") + 
-  geom_vline(xintercept=c(0), col="red", size = 2) +   geom_hline(yintercept=-log10(0.01), col="red", size = 2) 
+  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 5, alpha = 1, shape = 21,colour = "black") + 
+  geom_vline(xintercept=c(0), col="red", size = 3) +   geom_hline(yintercept=-log10(0.01), col="red", size = 3) 
 
 #TIGK: 60C vs 37C Comparisons
 TIGK.HeatvsCtrl$diffexpressed <- "No differential expression"
@@ -505,12 +504,11 @@ TIGK.HeatvsCtrl$diffexpressed[TIGK.HeatvsCtrl$log2FoldChange > 0 & TIGK.HeatvsCt
 TIGK.HeatvsCtrl$diffexpressed[TIGK.HeatvsCtrl$log2FoldChange < 0 & TIGK.HeatvsCtrl$padj < 0.01] <- "Downregulated in 60C"
 
 ggplot(data=TIGK.HeatvsCtrl, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed)) + 
-  theme(axis.title.x=element_text(size = 30), axis.title.y=element_text(size = 30), axis.text.x=element_text(size = 30), axis.text.y=element_text(size = 30), 
-        legend.text = element_text(size=25), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
+  theme(axis.title.x=element_text(size = 20), axis.title.y=element_text(size = 20), axis.text.x=element_text(size = 20), axis.text.y=element_text(size = 20), 
+        legend.text = element_text(size=20), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
         panel.grid.major = element_line(color = "grey", linewidth = 0.25),panel.grid.minor = element_line(color = "grey", linewidth = 0.25) )+
-  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 7, alpha = 1, shape = 21,colour = "black") + 
-  geom_vline(xintercept=c(0), col="red", size = 2) +   geom_hline(yintercept=-log10(0.01), col="red", size = 2) 
-
+  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 5, alpha = 1, shape = 21,colour = "black") + 
+  geom_vline(xintercept=c(0), col="red", size = 3) +   geom_hline(yintercept=-log10(0.01), col="red", size = 3) 
 
 #Cold Comparisons
 TIGK.ColdvsCtrl$diffexpressed <- "No differential expression"
@@ -518,12 +516,11 @@ TIGK.ColdvsCtrl$diffexpressed[TIGK.ColdvsCtrl$log2FoldChange > 0 & TIGK.ColdvsCt
 TIGK.ColdvsCtrl$diffexpressed[TIGK.ColdvsCtrl$log2FoldChange < 0 & TIGK.ColdvsCtrl$padj < 0.01] <- "Downregulated in -25C"
 
 ggplot(data=TIGK.ColdvsCtrl, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed)) + 
-  theme(axis.title.x=element_text(size = 30), axis.title.y=element_text(size = 30), axis.text.x=element_text(size = 30), axis.text.y=element_text(size = 30), 
-        legend.text = element_text(size=25), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
+  theme(axis.title.x=element_text(size = 20), axis.title.y=element_text(size = 20), axis.text.x=element_text(size = 20), axis.text.y=element_text(size = 20), 
+        legend.text = element_text(size=20), legend.title = element_blank(), panel.background = element_rect(fill = 'white'),
         panel.grid.major = element_line(color = "grey", linewidth = 0.25),panel.grid.minor = element_line(color = "grey", linewidth = 0.25) )+
-  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 7, alpha = 1, shape = 21,colour = "black") + 
-  geom_vline(xintercept=c(0), col="red", size = 2) +   geom_hline(yintercept=-log10(0.01), col="red", size = 2) 
-
+  geom_point(aes(colour=diffexpressed, fill=diffexpressed), size = 5, alpha = 1, shape = 21,colour = "black") + 
+  geom_vline(xintercept=c(0), col="red", size = 3) +   geom_hline(yintercept=-log10(0.01), col="red", size = 3) 
 
 ##### EnrichR Gene Enrichment Analysis using DEGs from comparisons####
 Heat.comparison.C1.upTIGK<-Heat.comparison.C1%>%filter(padj <  0.01 & log2FoldChange > 0)
@@ -729,10 +726,12 @@ HaCaT.HeatResponse.HSPs<-rbind(HaCaT.HeatvsCtrl.C1.chaperonins,HaCaT.HeatvsCtrl.
 mat.HaCaT.HeatResponse.HSPs<-counts(dds.HaCaT.HeatvsCtrl.Comparison, normalized = T)[HaCaT.HeatResponse.HSPs$X,] #this allows you to get counts data for only the Ensembl IDs correlating to Diff. Expressed Collagens
 mat.HaCaT.HeatResponse.HSPs.z<-t(apply(mat.HaCaT.HeatResponse.HSPs, 1, scale))
 colnames(mat.HaCaT.HeatResponse.HSPs.z)<-colnames(mat.HaCaT.HeatResponse.HSPs)
-pheatmap(mat.HaCaT.HeatResponse.HSPs.z, labels_row = HaCaT.HeatResponse.HSPs$symbol,
-         fontsize_row = 10,
-         fontsize_col = 10)
-
+pheatmap(mat.HaCaT.HeatResponse.HSPs.z, labels_row = HaCaT.HeatResponse.HSPs$symbol, 
+         cellwidth = 60,
+         show_colnames = F,
+         fontsize_col = 20,
+         fontsize = 20)
+help(pheatmap)
 #Pulling out all HGNC list of approved HSP gene names - heat injury response TIGK
 TIGK.HeatvsCtrl.C1.chaperonins<-  subset(TIGK.HeatvsCtrl.C1, symbol %in% Chaperonins$Approved.symbol)
 TIGK.HeatvsCtrl.C1.DNAJ<-  subset(TIGK.HeatvsCtrl.C1, symbol %in% DNAJ$Approved.symbol)
@@ -747,8 +746,10 @@ mat.TIGK.HeatResponse.HSPs<-counts(dds.TIGK.HeatvsCtrl.Comparison, normalized = 
 mat.TIGK.HeatResponse.HSPs.z<-t(apply(mat.TIGK.HeatResponse.HSPs, 1, scale))
 colnames(mat.TIGK.HeatResponse.HSPs.z)<-colnames(mat.TIGK.HeatResponse.HSPs)
 pheatmap(mat.TIGK.HeatResponse.HSPs.z, labels_row = TIGK.HeatResponse.HSPs$symbol,
-         fontsize_row = 10,
-         fontsize_col = 10)
+         cellwidth = 60,
+         show_colnames = F,
+         fontsize_col = 20,
+         fontsize = 20)
 
 #Pulling out all HGNC list of approved HSP gene names - Cold injury response HaCaT
 HaCaT.ColdvsCtrl.C1.chaperonins<-  subset(HaCaT.ColdvsCtrl.C1, symbol %in% Chaperonins$Approved.symbol)
@@ -764,8 +765,10 @@ mat.HaCaT.ColdResponse.HSPs<-counts(dds.HaCaT.ColdvsCtrl.Comparison, normalized 
 mat.HaCaT.ColdResponse.HSPs.z<-t(apply(mat.HaCaT.ColdResponse.HSPs, 1, scale))
 colnames(mat.HaCaT.ColdResponse.HSPs.z)<-colnames(mat.HaCaT.ColdResponse.HSPs)
 pheatmap(mat.HaCaT.ColdResponse.HSPs.z, labels_row = HaCaT.ColdResponse.HSPs$symbol,
-         fontsize_row = 10,
-         fontsize_col = 10)
+         cellwidth = 60,
+         show_colnames = F,
+         fontsize_col = 20,
+         fontsize = 20)
 
 #Pulling out all HGNC list of approved HSP gene names - Cold injury response TIGK
 TIGK.ColdvsCtrl.C1.chaperonins<-  subset(TIGK.ColdvsCtrl.C1, symbol %in% Chaperonins$Approved.symbol)
@@ -781,8 +784,10 @@ mat.TIGK.ColdResponse.HSPs<-counts(dds.TIGK.ColdvsCtrl.Comparison, normalized = 
 mat.TIGK.ColdResponse.HSPs.z<-t(apply(mat.TIGK.ColdResponse.HSPs, 1, scale))
 colnames(mat.TIGK.ColdResponse.HSPs.z)<-colnames(mat.TIGK.ColdResponse.HSPs)
 pheatmap(mat.TIGK.ColdResponse.HSPs.z, labels_row = TIGK.ColdResponse.HSPs$symbol,
-         fontsize_row = 10,
-         fontsize_col = 10)
+         cellwidth = 60,
+         show_colnames = F,
+         fontsize_col = 20,
+         fontsize = 20)
 
 
 #Pulling out all HGNC list of approved HSP gene names - 60C (heat) comparison
@@ -798,9 +803,11 @@ Heat.comparison.HSPs<-rbind(HaCaTvsTIGK.Heat.chaperonins,HaCaTvsTIGK.Heat.DNAJ, 
 mat.Heat.comparison.HSPs<-counts(dds.Heat.Comparison, normalized = T)[Heat.comparison.HSPs$X,] #this allows you to get counts data for only the Ensembl IDs correlating to Diff. Expressed Collagens
 mat.Heat.comparison.HSPs.z<-t(apply(mat.Heat.comparison.HSPs, 1, scale))
 colnames(mat.Heat.comparison.HSPs.z)<-colnames(mat.Heat.comparison.HSPs)
-pheatmap(mat.Heat.comparison.HSPs.z, labels_row = Heat.comparison.HSPs$symbol, cluster_cols = T, 
-         fontsize_row = 10,
-         fontsize_col = 10)
+pheatmap(mat.Heat.comparison.HSPs.z, labels_row = Heat.comparison.HSPs$symbol, cluster_cols = T,
+         cellwidth = 60,
+         show_colnames = F,
+         fontsize_col = 20,
+         fontsize = 20)
 
 #Pulling out all HGNC list of approved HSP gene names - -25C (cold) comparison
 HaCaTvsTIGK.Cold.chaperonins<-  subset(Cold.comparison.C1, symbol %in% Chaperonins$Approved.symbol)
@@ -815,9 +822,11 @@ Cold.comparison.HSPs<-rbind(HaCaTvsTIGK.Cold.chaperonins,HaCaTvsTIGK.Cold.DNAJ, 
 mat.Cold.comparison.HSPs<-counts(dds.Cold.Comparison, normalized = T)[Cold.comparison.HSPs$X,] #this allows you to get counts data for only the Ensembl IDs correlating to Diff. Expressed Collagens
 mat.Cold.comparison.HSPs.z<-t(apply(mat.Cold.comparison.HSPs, 1, scale))
 colnames(mat.Cold.comparison.HSPs.z)<-colnames(mat.Cold.comparison.HSPs)
-pheatmap(mat.Cold.comparison.HSPs.z, labels_row = Cold.comparison.HSPs$symbol, cluster_cols = T, 
-         fontsize_row = 10,
-         fontsize_col = 10)
+pheatmap(mat.Cold.comparison.HSPs.z, labels_row = Cold.comparison.HSPs$symbol, cluster_cols = T,
+         cellwidth = 60,
+         show_colnames = F,
+         fontsize_col = 20,
+         fontsize = 20)
 
 #Pulling out all HGNC list of approved HSP gene names - baseline (37C) comparison
 HaCaTvsTIGK.Ctrl.chaperonins<-  subset(Ctrl.comparison.C1, symbol %in% Chaperonins$Approved.symbol)
@@ -832,9 +841,11 @@ Ctrl.comparison.HSPs<-rbind(HaCaTvsTIGK.Ctrl.chaperonins,HaCaTvsTIGK.Ctrl.DNAJ, 
 mat.Ctrl.comparison.HSPs<-counts(dds.Ctrl.Comparison, normalized = T)[Ctrl.comparison.HSPs$X,] #this allows you to get counts data for only the Ensembl IDs correlating to Diff. Expressed Collagens
 mat.Ctrl.comparison.HSPs.z<-t(apply(mat.Ctrl.comparison.HSPs, 1, scale))
 colnames(mat.Ctrl.comparison.HSPs.z)<-colnames(mat.Ctrl.comparison.HSPs)
-pheatmap(mat.Ctrl.comparison.HSPs.z, labels_row = Ctrl.comparison.HSPs$symbol, cluster_cols = T, 
-         fontsize_row = 10,
-         fontsize_col = 10)
+pheatmap(mat.Ctrl.comparison.HSPs.z, labels_row = Ctrl.comparison.HSPs$symbol, cluster_cols = T,
+         cellwidth = 60,
+         show_colnames = F,
+         fontsize_col = 20,
+         fontsize = 20)
 
 write.csv(Heat.comparison.HSPs,  
           file = "C:/Users/chenh/Desktop/DiPietro Lab_Manuscripts/Thermal Injury to HaCaT and TIGK/DE of HSPs/HvsT.60C.HSPs.csv")
